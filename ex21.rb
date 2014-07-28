@@ -32,4 +32,8 @@ puts "Here is a puzzle."
 
 what = add(age, subtract(height, multiply(weight, divide(iq, 2))))
 
+inverse = subtract(age, add(height, divide(weight, multiply(iq, 2))))
+
 puts "That becomes: #{what}. Can you do it by hand?"
+
+puts "This is the inverse of the what here: #{inverse}"
