@@ -7,7 +7,7 @@ end
 
 class Engine
 
-	def intialize(scene_map)
+	def initialize(scene_map)
 		@scene_map = scene_map
 	end
 
@@ -99,30 +99,38 @@ class LaserWeaponArmory < Scene
     	
     	# sets a random 3 digit number as the code
     	code = "#{rand(1..9)}#{rand(1..9)}#{rand(1..9)}"
+        puts code
     	print "[keypad]> "
     	
     	guess = $stdin.gets.chomp
     	guesses = 0
 
-    	while guess != code and guessed < 10
+        if guess == code
+            puts "The container clicks open and the seal breaks, letting gas out."
+            puts "You grab the neutron bomb and run as fast as you can to the"
+            puts "bridge where you must place it in the right spot."
+            return 'the_bridge'
+        end
+
+    	while guess != code and guesses < 10
     		puts "BZZZZEDDD!"
       		guesses += 1
       		print "[keypad]> "
       		guess = $stdin.gets.chomp()
 
       		if guess == code
-      			puts "The container clicks open and the seal breaks, letting gas out."
+                puts "The container clicks open and the seal breaks, letting gas out."
           		puts "You grab the neutron bomb and run as fast as you can to the"
           		puts "bridge where you must place it in the right spot."
           		return 'the_bridge'
-          	else
-          		puts "The lock buzzes one last time and then you hear a sickening"
-         		puts "melting sound as the mechanism is fused together."
-          		puts "You decide to sit there, and finally the Gothons blow up the"
-          		puts "ship from their ship and you die."
-          		return 'death'
           	end
         end
+            # Ten guesses have been made
+            puts "The lock buzzes one last time and then you hear a sickening"
+            puts "melting sound as the mechanism is fused together."
+            puts "You decide to sit there, and finally the Gothons blow up the"
+            puts "ship from their ship and you die."
+            return 'death'
 	end
 end
 
@@ -177,6 +185,7 @@ class EscapePod < Scene
     	puts "do you take?"
 
     	good_pod = rand(1..5)
+        puts good_pod
     	print "[pod #]> "
     	guess = $stdin.gets.chomp.to_i
 
@@ -198,13 +207,21 @@ class EscapePod < Scene
 	end
 end
 
+class Finished < Scene
+    def enter()
+        puts "You are win"
+    end
+end
+
+
 class Map
 	@@scenes = {
     	'central_corridor' => CentralCorridor.new(),
     	'laser_weapon_armory' => LaserWeaponArmory.new(),
     	'the_bridge' => TheBridge.new(),
     	'escape_pod' => EscapePod.new(),
-    	'death' => Death.new()
+    	'death' => Death.new(),
+        'finished' => Finished.new()
   	}
 
 	def initialize(start_scene)
@@ -222,6 +239,5 @@ class Map
 end
 
 a_map = Map.new("central_corridor")
-a_game = Engine(a_map)
+a_game = Engine.new(a_map)
 a_game.play()
-
